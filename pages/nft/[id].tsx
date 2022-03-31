@@ -12,16 +12,16 @@ function NFTDropPage() {
   return (
     <div className="flex h-screen flex-col lg:grid lg:grid-cols-10">
       {/* Left side */}
-      <div className="bg-gradient-to-br from-cyan-800 to-rose-500">
+      <div className="bg-gradient-to-br from-cyan-900 to-green-700 lg:col-span-4">
         <div className="flex flex-col items-center justify-center py-2 lg:min-h-screen">
-          <div className="rounded-xl bg-gradient-to-br from-yellow-400 to-purple-600 p-2">
+          <div className="rounded-xl bg-gradient-to-br from-yellow-400 to-amber-900 p-2">
             <img
-              className="w-64 rounded-xl object-cover lg:h-96 lg:w-72"
+              className="w-44 rounded-xl object-cover hover:animate-pulse lg:h-96 lg:w-72"
               src="https://links.papareact.com/8sg"
               alt=""
             />
           </div>
-          <div>
+          <div className="space-y-2 p-5 text-center">
             <h1 className="text-4xl font-bold text-white">PAPAFAM Apes</h1>
             <h2 className="text-xl text-gray-300">
               A collection of PAPAFAM Apes who live & breathe React
@@ -71,7 +71,7 @@ function NFTDropPage() {
         </div>
 
         {/* Mint Button */}
-        <button className="mt-10 h-16 w-full rounded-full bg-red-600 font-bold text-white">
+        <button className="mt-10 h-16 w-full rounded-full bg-green-700 font-bold text-white">
           Mint NFT (0.01 ETH)
         </button>
       </div>
