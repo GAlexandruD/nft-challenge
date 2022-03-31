@@ -1,5 +1,8 @@
 import { useAddress, useDisconnect, useMetamask } from '@thirdweb-dev/react'
 
+import AiOutlineHome from '@react-icons/all-files/ai/AiOutlineHome'
+import GoHome from '@react-icons/all-files/go/GoHome'
+
 function NFTDropPage() {
   //Auth
   const connectWithMetamask = useMetamask()
@@ -14,6 +17,11 @@ function NFTDropPage() {
       {/* Left side */}
 
       <div className="bg-gradient-to-br from-cyan-900 to-green-700 lg:col-span-4">
+        <div className="absolute left-2 top-2 hover:animate-pulse">
+          <a title="Homepage" className="text-3xl text-gray-200" href="/">
+            ⇦
+          </a>
+        </div>
         <div className="flex flex-col items-center justify-center py-2 lg:min-h-screen">
           <div className="relative rounded-xl bg-gradient-to-br from-yellow-400 to-cyan-600 p-2">
             <img
@@ -46,6 +54,7 @@ function NFTDropPage() {
             NFT MARKET Place
           </h1>
           <button
+            title="Sign In/Out"
             onClick={() => (address ? disconnect() : connectWithMetamask())}
             className="rounded-full bg-rose-400 px-4 py-2 text-xs font-bold text-white lg:px-5 lg:py-3 lg:text-base"
           >
@@ -75,7 +84,10 @@ function NFTDropPage() {
         </div>
 
         {/* Mint Button */}
-        <button className="mt-10 h-16 w-full rounded-full bg-green-700 font-bold text-white">
+        <button
+          title="Mint NFT"
+          className="mt-10 h-16 w-full rounded-full bg-green-700 font-bold text-white"
+        >
           Mint NFT (0.01 ETH)
         </button>
       </div>

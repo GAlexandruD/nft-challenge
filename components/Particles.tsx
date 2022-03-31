@@ -19,7 +19,7 @@ const ParticlesTwo = () => {
       options={{
         background: {
           color: {
-            value: '#0d47a1',
+            value: '#164e62',
           },
         },
         fpsLimit: 120,
@@ -70,7 +70,7 @@ const ParticlesTwo = () => {
             enable: true,
             outMode: 'bounce',
             random: false,
-            speed: 2,
+            speed: 1,
             straight: false,
           },
           number: {
