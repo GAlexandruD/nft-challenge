@@ -18,7 +18,7 @@ module.exports = {
 
       animation: {
         'spin-slow': 'spin 3s linear infinite',
-        'rotate-y': 'rotate-y 2s linear',
+        'rotate-y': 'rotate-y 4s linear',
       },
     },
   },
