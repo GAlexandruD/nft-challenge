@@ -11,14 +11,18 @@ interface Props {
 }
 
 const Home = ({ collections }: Props) => {
+  console.log(collections.length)
+  // collections.length >1 ? 'className includes grid' : className includes flex
   return (
-    <>
+    <div className="">
       <Head>
         <title>NFT Drop</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       <ParticlesTwo />
-      <div className="absolute mx-auto flex min-h-screen max-w-7xl flex-col  py-20 px-10 2xl:px-0">
+
+      <div className=" absolute left-0 right-0 mx-auto flex min-h-screen max-w-7xl flex-col  py-20 px-10 2xl:px-0">
         <h1 className="mb-10 text-4xl font-extralight">
           The{' '}
           <span className="font-extrabold underline decoration-pink-600/50">
@@ -27,7 +31,13 @@ const Home = ({ collections }: Props) => {
           NFT MARKET Place
         </h1>
         <main className="rounded-xl bg-yellow-200/50 p-10 shadow-xl shadow-rose-400/20">
-          <div className="grid space-x-3 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+          <div
+            className={`${
+              collections.length > 1
+                ? 'grid space-x-3 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'
+                : null
+            }`}
+          >
             {
               //For multiple collections change flex to grid
             }
@@ -51,7 +61,7 @@ const Home = ({ collections }: Props) => {
           </div>
         </main>
       </div>
-    </>
+    </div>
   )
 }
 

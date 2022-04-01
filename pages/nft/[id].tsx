@@ -25,11 +25,6 @@ function NFTDropPage({ collection }: Props) {
       {/* Left side */}
 
       <div className="bg-gradient-to-br from-cyan-900 to-green-700 lg:col-span-4">
-        <div className="absolute left-2 top-2 hover:animate-pulse">
-          <a title="Homepage" className="text-3xl text-gray-200" href="/">
-            ⇦
-          </a>
-        </div>
         <div className="flex flex-col items-center justify-center py-2 lg:min-h-screen">
           <div className="relative rounded-xl bg-gradient-to-br from-yellow-400 to-cyan-600 p-2">
             <img
@@ -68,15 +63,15 @@ function NFTDropPage({ collection }: Props) {
           >
             {address ? 'Sign Out' : 'Sign In'}
           </button>
-
-          <hr className="my-2 border" />
-          {address && (
-            <p>
-              You're logged in with wallet address: {address.substring(0, 5)}...
-              {address.substring(address.length - 5)}
-            </p>
-          )}
         </header>
+
+        <hr />
+        {address && (
+          <p className="self-end">
+            You're logged in with wallet address: {address.substring(0, 5)}...
+            {address.substring(address.length - 5)}
+          </p>
+        )}
 
         {/* Content */}
         <div className="mt-10 flex flex-1 flex-col items-center space-y-6 text-center lg:justify-center lg:space-y-0">
