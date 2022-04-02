@@ -69,14 +69,15 @@ const Home = ({ collections }: Props) => {
         <main className="rounded-xl bg-yellow-200/50 p-10 shadow-xl shadow-yellow-300/20">
           <div
             className={`${
-              showingCollections.length > 1
-                ? 'grid space-x-3 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'
-                : null
+              showingCollections.length === 1
+                ? null
+                : showingCollections.length === 2
+                ? 'grid space-x-3 md:grid-cols-2'
+                : showingCollections.length === 3
+                ? 'grid space-x-3 md:grid-cols-2 lg:grid-cols-3'
+                : 'grid space-x-3 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'
             }`}
           >
-            {
-              //For multiple collections change flex to grid
-            }
             {showingCollections.map((collection, idx) => (
               <Link key={idx} href={`/nft/${collection.slug.current}`}>
                 <div className="m-2 flex cursor-pointer flex-col items-center rounded-xl bg-gradient-to-b from-teal-800/40 to-teal-800/90 shadow-2xl transition-all duration-200 hover:scale-105">
