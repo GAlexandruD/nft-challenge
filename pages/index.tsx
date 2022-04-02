@@ -16,36 +16,37 @@ interface Props {
 
 const Home = ({ collections }: Props) => {
   const [localCollections, setLocalCollections] = useState(collections)
-  console.log({ localCollections })
 
-  const results = [
+  const filteringResults = [
     { name: '1 Card' },
     { name: '2 Cards' },
     { name: '3 Cards' },
     { name: 'All Cards' },
   ]
-  const [selected, setSelected] = useState(results[3])
+  const [selected, setSelected] = useState(filteringResults[3])
 
-  const filtering: any = {
-    cardOne: localCollections.slice(0, 1),
-    cardTwo: localCollections.slice(0, 2),
-    cardThree: localCollections.slice(0, 3),
-    carDAll: localCollections,
-  }
-  const expertFunction = (props: string) => {
-    console.log({ props })
-    console.log('bau')
-    console.log(filtering.props)
+  const calculatingShowingCollections = (props: string) => {
+    const toSlice = (props: string) => {
+      if (props === '1 Card') {
+        return localCollections.slice(0, 1)
+      } else if (props === '2 Cards') {
+        return localCollections.slice(0, 2)
+      } else if (props === '3 Cards') {
+        return localCollections.slice(0, 3)
+      } else {
+        return localCollections
+      }
+    }
+    return toSlice(props)
   }
 
   const [filtered, setFiltered] = useState(localCollections)
 
   const [showingCollections, setShowingCollections] = useState(localCollections)
-  console.log({ showingCollections })
 
   useEffect(() => {
-    expertFunction(selected.name)
-    console.log({ selected })
+    const numberToShow = calculatingShowingCollections(selected.name)
+    setShowingCollections(numberToShow)
   }, [selected])
 
   return (
@@ -68,7 +69,7 @@ const Home = ({ collections }: Props) => {
         <main className="rounded-xl bg-yellow-200/50 p-10 shadow-xl shadow-yellow-300/20">
           <div
             className={`${
-              collections.length > 1
+              showingCollections.length > 1
                 ? 'grid space-x-3 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'
                 : null
             }`}
@@ -76,7 +77,7 @@ const Home = ({ collections }: Props) => {
             {
               //For multiple collections change flex to grid
             }
-            {collections.map((collection, idx) => (
+            {showingCollections.map((collection, idx) => (
               <Link key={idx} href={`/nft/${collection.slug.current}`}>
                 <div className="m-2 flex cursor-pointer flex-col items-center rounded-xl bg-gradient-to-b from-teal-800/40 to-teal-800/90 shadow-2xl transition-all duration-200 hover:scale-105">
                   <div className="mt-4 rounded-xl p-2">
@@ -118,7 +119,7 @@ const Home = ({ collections }: Props) => {
                 leaveTo="opacity-0"
               >
                 <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-teal-800 py-1 text-base text-yellow-200 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                  {results.map((person, personIdx) => (
+                  {filteringResults.map((person, personIdx) => (
                     <Listbox.Option
                       key={personIdx}
                       className={({ active }) =>
