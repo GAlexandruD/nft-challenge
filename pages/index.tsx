@@ -50,8 +50,8 @@ const Home = ({ collections }: Props) => {
   }, [selected])
 
   const [searching, setSearching] = useState('')
-  const searchChange = (event) => {
-    setSearching(event.target.value)
+  const searchChange = (event: any) => {
+    setSearching(event.target?.value)
   }
 
   const filteredCards = localCollections.filter((collection) => {

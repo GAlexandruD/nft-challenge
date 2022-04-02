@@ -140,12 +140,12 @@ function NFTDropPage({ collection }: Props) {
         console.log({ claimedTokenId })
         console.log({ clamedNFT })
 
-        const mintedDetails = Object.keys(clamedNFT.metadata.properties) //array of keys
+        const mintedDetails = Object.keys(clamedNFT.metadata.properties?) //array of keys
         const showingDetails = mintedDetails.map((item, idx) => {
           return (
             <p>
               <span className="font-bold">{`${item}: `}</span>
-              {`${clamedNFT.metadata.properties[item]}`}
+              {`${clamedNFT.metadata.properties?[item]}`}
             </p>
           )
         })
