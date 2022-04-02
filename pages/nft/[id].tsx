@@ -65,7 +65,7 @@ function NFTDropPage({ collection }: Props) {
 
     setLoading(true)
 
-    const notification = toast.loading('Mining...', {
+    const notification = toast.loading('Minting...', {
       style: {
         background: 'white',
         color: 'green',
