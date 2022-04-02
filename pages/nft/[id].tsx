@@ -22,7 +22,7 @@ interface Props {
   collection: Collection
 }
 
-// const clamedNFT = {
+// const claimedNFT = {
 //   owner: '0xdC7E280BC08d2144583C3756c93B892949127233',
 //   metadata: {
 //     name: '#3',
@@ -118,7 +118,7 @@ function NFTDropPage({ collection }: Props) {
         //////////////
         ///////////
         /////////
-        const clamedNFT = await tx[0].data() // (optional) get the metadata of the claimed NFT
+        const claimedNFT = await tx[0].data() // (optional) get the metadata of the claimed NFT
 
         ////POP-up with metadata of the claimed NFT
         ///////////////////////////////////////////////
@@ -138,14 +138,17 @@ function NFTDropPage({ collection }: Props) {
         })
         console.log({ receipt })
         console.log({ claimedTokenId })
-        console.log({ clamedNFT })
+        console.log({ claimedNFT })
 
-        const mintedDetails = Object.keys(clamedNFT.metadata.properties?) //array of keys
+        const newlyClaimedNFT: any = claimedNFT.metadata.properties
+
+        const mintedDetails = Object.keys(newlyClaimedNFT) //array of keys
         const showingDetails = mintedDetails.map((item, idx) => {
           return (
             <p>
-              <span className="font-bold">{`${item}: `}</span>
-              {`${clamedNFT.metadata.properties?[item]}`}
+              <span className="font-bold">{item}: </span>
+
+              {newlyClaimedNFT[item]}
             </p>
           )
         })
@@ -160,15 +163,15 @@ function NFTDropPage({ collection }: Props) {
                 <div className="flex-shrink-0 pt-0.5">
                   <img
                     className="h-20 w-20 rounded-full"
-                    src={clamedNFT.metadata.image}
+                    src={claimedNFT.metadata.image}
                     alt=""
                   />
                 </div>
                 <div className="ml-3 flex-1">
                   <p className="text-sm font-medium text-gray-900">
-                    You've got: {clamedNFT.metadata.name}
+                    You've got: {claimedNFT.metadata.name}
                     <hr />
-                    {clamedNFT.metadata.description}
+                    {claimedNFT.metadata.description}
                   </p>
                   <div className="mt-1 text-sm text-gray-500">
                     {showingDetails}
@@ -181,7 +184,7 @@ function NFTDropPage({ collection }: Props) {
                 onClick={() => toast.dismiss(t.id)}
                 className="flex w-full flex-col items-center justify-center rounded-none rounded-r-lg border border-transparent p-4 text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               >
-                <p>{clamedNFT.metadata.name}</p>
+                <p>{claimedNFT.metadata.name}</p>
                 <p>Minted!</p>
               </button>
             </div>
