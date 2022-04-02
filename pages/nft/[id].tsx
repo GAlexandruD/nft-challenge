@@ -11,13 +11,37 @@ import { GetServerSideProps } from 'next'
 import { sanityClient, urlFor } from '../../sanity'
 import { Collection } from '../../typing'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Fragment } from 'react'
 import { BigNumber } from 'ethers'
 import toast, { Toaster } from 'react-hot-toast'
+import { Listbox, Transition } from '@headlessui/react'
+import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
+import { BiDownArrow } from 'react-icons/bi'
 
 interface Props {
   collection: Collection
 }
+
+// const clamedNFT = {
+//   owner: '0xdC7E280BC08d2144583C3756c93B892949127233',
+//   metadata: {
+//     name: '#3',
+//     description: 'A PAPAFAM Ape',
+//     image:
+//       'https://gateway.ipfscdn.io/ipfs/QmecgHz9dM171cR4JxSaw2B3uzWtQvLYjhBzNZJ3N1EX2c/3.png',
+//     id: {
+//       type: 'BigNumber',
+//       hex: '0x03',
+//     },
+//     uri: 'ipfs://QmR3zsDrnxUYThSoPZXCQViqquLLhcN18VFDwuS4pnJJHS/3',
+//     properties: {
+//       Shirt: 'white suit',
+//       Fur: 'cream',
+//       Hat: 'halo',
+//       Eyes: 'blue visor',
+//     },
+//   },
+// }
 
 function NFTDropPage({ collection }: Props) {
   const [claimedSupply, setClaimedSupply] = useState<number>(0)
@@ -25,12 +49,17 @@ function NFTDropPage({ collection }: Props) {
   const nftDrop = useNFTDrop(collection.address)
   const [loading, setLoading] = useState<boolean>(true)
   const [priceInEth, setPriceInEth] = useState<string>()
+  const [nftToMint, setNftToMint] = useState<number>(1)
 
   //Auth
   const connectWithMetamask = useMetamask()
   const address = useAddress()
   const disconnect = useDisconnect()
   // ---
+
+  useEffect(() => {
+    console.log({ nftToMint })
+  }, [nftToMint])
 
   useEffect(() => {
     if (!nftDrop) return
@@ -89,14 +118,15 @@ function NFTDropPage({ collection }: Props) {
         //////////////
         ///////////
         /////////
-        const clamedNFT = tx[0].data() // (optional) get the metadata of the claimed NFT
+        const clamedNFT = await tx[0].data() // (optional) get the metadata of the claimed NFT
+
         ////POP-up with metadata of the claimed NFT
         ///////////////////////////////////////////////
         ///////////////////////////////////////////
         /////////////////////////////////////
         ///////////////////////////////
 
-        toast('Hooray! You just minted a NFT!', {
+        toast.success('Hooray! You just minted a NFT!', {
           duration: 8000,
           style: {
             background: 'white',
@@ -109,10 +139,58 @@ function NFTDropPage({ collection }: Props) {
         console.log({ receipt })
         console.log({ claimedTokenId })
         console.log({ clamedNFT })
+
+        const mintedDetails = Object.keys(clamedNFT.metadata.properties) //array of keys
+        const showingDetails = mintedDetails.map((item, idx) => {
+          return (
+            <p>
+              <span className="font-bold">{`${item}: `}</span>
+              {`${clamedNFT.metadata.properties[item]}`}
+            </p>
+          )
+        })
+        toast.custom((t) => (
+          <div
+            className={`${
+              t.visible ? 'animate-enter' : 'animate-leave'
+            } pointer-events-auto flex w-full max-w-md rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5`}
+          >
+            <div className="w-0 flex-1 p-4">
+              <div className="flex items-start">
+                <div className="flex-shrink-0 pt-0.5">
+                  <img
+                    className="h-20 w-20 rounded-full"
+                    src={clamedNFT.metadata.image}
+                    alt=""
+                  />
+                </div>
+                <div className="ml-3 flex-1">
+                  <p className="text-sm font-medium text-gray-900">
+                    You've got: {clamedNFT.metadata.name}
+                    <hr />
+                    {clamedNFT.metadata.description}
+                  </p>
+                  <div className="mt-1 text-sm text-gray-500">
+                    {showingDetails}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="flex border-l border-gray-200">
+              <button
+                onClick={() => toast.dismiss(t.id)}
+                className="flex w-full flex-col items-center justify-center rounded-none rounded-r-lg border border-transparent p-4 text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              >
+                <p>{clamedNFT.metadata.name}</p>
+                <p>Minted!</p>
+              </button>
+            </div>
+          </div>
+        ))
       })
       .catch((err) => {
         console.log(err)
-        toast('Whoooops.... Something went wrong!', {
+        toast.error('Whoooops.... Something went wrong!', {
           style: {
             background: 'red',
             color: 'white',
@@ -126,6 +204,25 @@ function NFTDropPage({ collection }: Props) {
         setLoading(false)
         toast.dismiss(notification)
       })
+  }
+
+  const increaseNFT = () => {
+    setNftToMint(nftToMint + 1)
+  }
+
+  const decreaseNFT = () => {
+    nftToMint === 1
+      ? toast.error("You can't mint less than 1 NFT", {
+          duration: 1000,
+          style: {
+            background: 'white',
+            color: 'green',
+            fontWeight: 'bolder',
+            fontSize: '17px', //1.5rem
+            padding: '20px', //1rem
+          },
+        })
+      : setNftToMint(nftToMint - 1)
   }
 
   return (
@@ -143,11 +240,13 @@ function NFTDropPage({ collection }: Props) {
             />
           </div>
           <div className="space-y-2 p-5 text-center">
-            <h1 className="text-4xl font-bold text-white">
+            <h1 className="text-4xl font-bold text-yellow-200">
               {collection.nftCollectionName}
             </h1>
 
-            <h2 className="text-xl text-gray-300">{collection.description}</h2>
+            <h2 className="text-xl text-yellow-200">
+              {collection.description}
+            </h2>
           </div>
         </div>
       </div>
@@ -212,24 +311,41 @@ function NFTDropPage({ collection }: Props) {
         </div>
 
         {/* Mint Button */}
-        <button
-          onClick={mintNft}
-          disabled={
-            loading || claimedSupply === totalSupply?.toNumber() || !address
-          }
-          title="Mint NFT"
-          className="mt-10 h-16 w-full rounded-full bg-green-700 font-bold text-white disabled:bg-gray-400"
-        >
-          {loading ? (
-            <>Loading...</>
-          ) : claimedSupply === totalSupply?.toNumber() ? (
-            <>Sold Out</>
-          ) : !address ? (
-            <>Sign in to Mint</>
-          ) : (
-            <span className="font-bold">Mint NFT ({priceInEth} ETH)</span>
-          )}
-        </button>
+        <div className="flex flex-row">
+          <button
+            onClick={mintNft}
+            disabled={
+              loading || claimedSupply === totalSupply?.toNumber() || !address
+            }
+            title="Mint NFT"
+            className="mt-10 h-16 w-full rounded-full bg-green-700 font-bold text-yellow-200 disabled:bg-gray-400"
+          >
+            {loading ? (
+              <>Loading...</>
+            ) : claimedSupply === totalSupply?.toNumber() ? (
+              <>Sold Out</>
+            ) : !address ? (
+              <>Sign in to Mint</>
+            ) : (
+              <span className="font-bold">
+                Mint {nftToMint} NFT ({priceInEth} ETH)
+              </span>
+            )}
+          </button>
+          <div
+            id="selectNFTs"
+            className="mt-10 ml-10 flex h-16 w-32 items-center justify-center rounded-full bg-green-700 text-2xl text-white"
+          >
+            <div className="flex flex-col text-yellow-200">
+              <button onClick={increaseNFT}>
+                <BiDownArrow className="rotate-180" />
+              </button>
+              <button onClick={decreaseNFT}>
+                <BiDownArrow />
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )

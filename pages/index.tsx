@@ -49,6 +49,23 @@ const Home = ({ collections }: Props) => {
     setShowingCollections(numberToShow)
   }, [selected])
 
+  const [searching, setSearching] = useState('')
+  const searchChange = (event) => {
+    setSearching(event.target.value)
+  }
+
+  const filteredCards = localCollections.filter((collection) => {
+    return collection.title.toLowerCase().includes(searching.toLowerCase())
+  })
+
+  useEffect(() => {
+    console.log(searching)
+    console.log({ showingCollections })
+    console.log({ filteredCards })
+    setShowingCollections(filteredCards)
+    //  setFiltered(filteredCards)
+  }, [searching])
+
   return (
     <div className="">
       <Head>
@@ -59,13 +76,21 @@ const Home = ({ collections }: Props) => {
       <ParticlesTwo />
 
       <div className=" absolute left-0 right-0 mx-auto flex min-h-screen max-w-7xl flex-col  py-20 px-10 2xl:px-0">
-        <h1 className="mb-10 text-4xl font-extralight text-yellow-200">
-          The{' '}
-          <span className="font-extrabold underline decoration-pink-600/50">
-            PAPAFAM
-          </span>{' '}
-          NFT MARKET Place
-        </h1>
+        <div className="flex flex-col place-items-center justify-center  xl:flex-row xl:justify-between">
+          <h1 className="mb-10 text-4xl font-extralight text-yellow-200">
+            The{' '}
+            <span className="font-extrabold underline decoration-pink-600/50">
+              PAPAFAM
+            </span>{' '}
+            NFT MARKET Place
+          </h1>
+          <input
+            onChange={searchChange}
+            placeholder="Search for a collection"
+            type="search"
+            className="focus: mb-10 h-10 w-96 rounded-lg bg-teal-900/50 text-center text-xl font-extralight text-yellow-200  placeholder-yellow-200 focus:shadow-none focus:outline-yellow-400/90"
+          ></input>
+        </div>
         <main className="rounded-xl bg-yellow-200/50 p-10 shadow-xl shadow-yellow-300/20">
           <div
             className={`${
